@@ -1,164 +1,267 @@
 # 🛡️ SocialShield
 
-**Defensive Cybersecurity & Cyber-Fraud Intelligence Platform**
+> **A 100% free, zero-budget cybersecurity tool to detect scams, phishing links, and fake social media accounts in seconds.**
 
-SocialShield is an open-source, defensive cybersecurity platform engineered to detect social engineering attacks, account impersonation, deceptive infrastructure, and financial cyber-fraud using open public signals and threat intelligence.
-
----
-
-## 💡 Zero-Budget Principle
-
-SocialShield is architected strictly under a **zero-budget philosophy**:
-- **No Paid APIs**: Relies on open RFC standards (DNS-over-HTTPS via Cloudflare, ICANN RDAP for domain age), open malware feeds (URLhaus by abuse.ch), and free phishing databases (PhishTank).
-- **No Billing Requirements**: Zero services that require credit cards, trial billing, or payment methods.
-- **Built-in Autonomous AI Security Analyst**: Operates 100% locally and offline without external API keys, with optional plug-and-play support for free-tier cloud models (Google Gemini Free Tier, Groq Free Tier).
+[![CI/CD Pipeline](https://github.com/your-username/SocialShield/actions/workflows/ci.yml/badge.svg)](https://github.com/your-username/SocialShield)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-brightgreen.svg)](https://python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688.svg)](https://fastapi.tiangolo.com)
+[![React 19](https://img.shields.io/badge/React-19.0-61dafb.svg)](https://react.dev)
+[![Tests Passing](https://img.shields.io/badge/Tests-27%2F27%20Passed-success.svg)](backend/tests)
 
 ---
 
-## 🚀 Development Roadmap & Delivery Status
+## 📖 What is SocialShield? (In Plain English)
 
-| Sprint | Milestone | Status | Key Deliverables |
-| :--- | :--- | :---: | :--- |
-| **Sprint 1** | **Project Setup** | ✅ Complete | GitHub repository, Python 3.12+ environment, FastAPI, React 19 + TypeScript, PostgreSQL, environment variables. |
-| **Sprint 2** | **Dashboard** | ✅ Complete | JWT login, security metrics dashboard, live scan form, real-time scan history table, forensic findings report page. |
-| **Sprint 3** | **OSINT Engine** | ✅ Complete | Multi-platform username footprinting, Shannon entropy, homoglyph detection, DoH DNS intelligence, ICANN RDAP domain age, HTTP redirect hop tracer, OpenGraph metadata extraction. |
-| **Sprint 4** | **Fraud Engine** | ✅ Complete | Multi-category scam detectors (crypto doubler/drainer, task scams, advance fee, pig butchering, tech support extortion), phishing & brand typosquatting heuristics, high-abuse TLD scoring, impersonation detection, calibrated multi-factor risk scoring (0–100). |
-| **Sprint 5** | **AI Security Analyst** | ✅ Complete | Autonomous Cyber Threat Intelligence Analyst, MITRE ATT&CK® matrix mapping, threat actor profiling, evidence correlation, containment guidance, zero-budget cloud LLM connectors (Gemini / Groq) with local offline fallback. |
-| **Sprint 6** | **Security Hardening** | ✅ Complete | Salted PBKDF2 password hashing, JWT bearer tokens, RBAC (`admin`, `analyst`, `viewer`), thread-safe sliding window rate limiting, SSRF guard blocking private/loopback/cloud metadata ranges, prompt-injection defense with input defanging, security headers (`nosniff`, `DENY`, `HSTS`). |
-| **Sprint 7** | **Testing** | ✅ Complete | 27 automated tests passing: Unit tests, API endpoint tests, Security hardening tests, False-positive benchmark tests. |
-| **Sprint 8** | **Deployment** | ✅ Complete | Multi-stage Dockerfiles (Backend & Frontend), Nginx SPA reverse proxy with gzip, Docker Compose stack with PostgreSQL 16 healthchecks, GitHub Actions CI/CD pipeline, `/api/metrics` operational monitoring. |
+Have you ever received a suspicious DM, seen a crypto giveaway that seemed too good to be true, or wondered if a profile or link is legitimate? 
+
+**SocialShield** is a defensive intelligence platform that investigates any **social media username** or **web link** and gives you a clear safety verdict:
+- 🚨 **Is it a scam?** (Crypto doublers, fake job offers, advance-fee prizes, extortion)
+- 🎣 **Is it a phishing site?** (Lookalike domains mimicking PayPal, Microsoft, Apple, or Binance)
+- 🎭 **Is someone impersonating an official account?** (Detects fake VIPs, deceptive handles like `paypa1` or `elonmusk_official`, and invisible lookalike characters)
+- 🤖 **What should you do?** (An AI Security Analyst explains the threat in simple terms and gives you step-by-step incident containment actions)
 
 ---
 
-## 🏛️ System Architecture
+## 💎 The Zero-Budget Golden Rule
 
-```
-                               ┌────────────────────────────────────────────────────────┐
-                               │                    User / Analyst                      │
-                               └───────────────────────────┬────────────────────────────┘
-                                                           │
-                                                           ▼
-                               ┌────────────────────────────────────────────────────────┐
-                               │       Frontend: React 19 + TypeScript + Vite           │
-                               │      (Dark Cyberpunk UI, Glassmorphism, Risk Gauges)   │
-                               └───────────────────────────┬────────────────────────────┘
-                                                           │ JWT Bearer / REST API
-                                                           ▼
-                               ┌────────────────────────────────────────────────────────┐
-                               │              FastAPI Defensive Gateway                 │
-                               │  - Security Headers (CSP, HSTS, X-Frame-Options)       │
-                               │  - Sliding Window Rate Limiting                        │
-                               │  - SSRF Protection Filter                              │
-                               │  - RBAC & JWT Authentication                           │
-                               └───────────┬────────────────────────────────┬───────────┘
-                                           │                                │
-                 ┌─────────────────────────┴──────────┐          ┌──────────┴───────────────┐
-                 │                                    │          │                          │
-                 ▼                                    ▼          ▼                          ▼
-   ┌───────────────────────────┐        ┌───────────────────────────┐        ┌───────────────────────────┐
-   │    Sprint 3: OSINT Engine │        │   Sprint 4: Fraud Engine  │        │ Sprint 5: AI Analyst      │
-   │  - Username footprinting  │        │  - Scam heuristics        │        │  - MITRE ATT&CK Mapping   │
-   │  - Homoglyph detection    │        │  - Phishing & Typosquats  │        │  - Threat Actor Profiling │
-   │  - Cloudflare DoH DNS     │        │  - Impersonation cues     │        │  - Evidence Synthesis     │
-   │  - ICANN RDAP Domain Age  │        │  - Calibrated Risk Scorer │        │  - Incident Containment   │
-   │  - URL trace & Threat Feed│        └───────────────────────────┘        └───────────────────────────┘
-   └───────────────────────────┘                      │
-                 │                                    ▼
-                 └──────────────────────► ┌───────────────────────────┐
-                                          │  PostgreSQL 16 Storage    │
-                                          │  - Scans & Evidence JSON  │
-                                          │  - Users & RBAC Roles     │
-                                          └───────────────────────────┘
-```
+> **"No paid APIs. No billing required. No credit cards needed."**
+
+Every feature in SocialShield is built using free, open public standards:
+- **Free Malware & Phishing Feeds**: Uses [URLhaus](https://urlhaus.abuse.ch/) and [PhishTank](https://phishtank.org/).
+- **Free Domain & DNS Checks**: Uses open DNS-over-HTTPS (Cloudflare DoH) and ICANN RDAP.
+- **Free AI Reasoning**: Includes a built-in **Autonomous Cyber Analyst Engine** that runs 100% locally on your computer for free, with optional plug-and-play support for free-tier Google Gemini or Groq models.
 
 ---
 
-## 🧪 Testing Suite (Sprint 7)
+## 🚀 Quick Start (Up & Running in 2 Minutes)
 
-SocialShield includes a comprehensive test suite executed with `pytest`:
-
+### Step 1: Clone the Repository
 ```bash
-cd backend
-.\venv\Scripts\python -m pytest -v tests/
+git clone https://github.com/your-username/SocialShield.git
+cd SocialShield
 ```
 
-Test coverage includes:
-1. **Unit Tests (`test_unit_engines.py`)**: Normalization, Shannon entropy, homoglyph character analysis, scam keyword regexes, Levenshtein brand distance, calibrated risk scoring.
-2. **API Tests (`test_api_endpoints.py`)**: End-to-end endpoint tests for health, metrics, registration, login, profile, scan lifecycle, and AI report generation.
-3. **Security Hardening Tests (`test_security_hardening.py`)**: Verification of SSRF blocks against `127.0.0.1`, `localhost`, `169.254.169.254`, `192.168.1.1`, security response headers, prompt injection defanging, and admin RBAC enforcement.
-4. **False-Positive Tests (`test_false_positives.py`)**: Benchmarking benign targets (`google.com`, `github.com`, legitimate usernames) to guarantee zero false-positive high-risk alarms, while confirming accurate risk escalation on active phishing samples.
-
----
-
-## ⚡ Quick Start (Development)
-
-### 1. Prerequisites
-- Python 3.12+
-- Node.js 20+
-- PostgreSQL database
-
-### 2. Backend Setup
-```bash
+### Step 2: Start the Backend (FastAPI)
+```powershell
+# In PowerShell:
 cd backend
-python -m venv venv
 .\venv\Scripts\activate
 pip install -r requirements.txt
 pip install pytest httpx
 
-# Configure environment
-cp ../.env.example .env
-# Edit .env with your DATABASE_URL
-
-# Start backend server
+# Start the API server
 uvicorn app.main:app --reload --port 8000
 ```
+*(The backend automatically creates the database tables and seeds demo accounts on first launch!)*
 
-Default seeded credentials (created on startup):
-- **Admin**: `admin` / `Admin@12345`
-- **Analyst**: `analyst` / `Analyst@12345`
-
-### 3. Frontend Setup
-```bash
+### Step 3: Start the Frontend (React + Vite)
+Open a new terminal window:
+```powershell
 cd frontend
 npm install
 npm run dev
 ```
-Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+### Step 4: Open in Your Browser!
+- **Web App**: [http://localhost:5173](http://localhost:5173)
+- **API Swagger Docs**: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+- **Health Check**: [http://127.0.0.1:8000/health](http://127.0.0.1:8000/health)
 
 ---
 
-## 🐳 Production Deployment (Docker Compose)
+## 🔑 Demo Login Accounts
 
-Run the full production stack with a single command:
+SocialShield comes pre-configured with two user accounts ready for testing:
 
-```bash
-docker-compose up --build -d
+| Role | Username | Password | Permissions |
+| :--- | :--- | :--- | :--- |
+| **👑 Admin** | `admin` | `Admin@12345` | Full access: run scans, delete scans, view metrics |
+| **🔍 Analyst** | `analyst` | `Analyst@12345` | Standard operator: run scans, view AI reports |
+
+*(Tip: On the login page, you can click the quick-fill buttons to sign in with one click!)*
+
+---
+
+## 🔍 How SocialShield Works
+
+When you enter a target (like `http://paypal-security-update.xyz/login.php` or `@elonmusk_official`), SocialShield runs it through four defensive engines in parallel:
+
+```
+    Your Input: Username or URL
+               │
+               ▼
+  ┌─────────────────────────┐
+  │  1. OSINT Engine        │ ──► Checks DNS, domain age, redirect hops, and cross-platform presence.
+  └────────────┬────────────┘
+               ▼
+  ┌─────────────────────────┐
+  │  2. Fraud Engine        │ ──► Scans for crypto doublers, job scams, phishing paths, and lookalikes.
+  └────────────┬────────────┘
+               ▼
+  ┌─────────────────────────┐
+  │  3. Risk Calibrator     │ ──► Calculates an explainable 0–100 Risk Score across 5 tiers.
+  └────────────┬────────────┘
+               ▼
+  ┌─────────────────────────┐
+  │  4. AI Security Analyst │ ──► Writes an executive report with MITRE ATT&CK codes & action steps.
+  └─────────────────────────┘
 ```
 
-Services initialized:
-- `socialshield-db`: PostgreSQL 16 on port `5432` with automated healthchecks.
-- `socialshield-api`: FastAPI production app on port `8000` with 2 workers.
-- `socialshield-web`: React production SPA served by Nginx on port `80` with reverse proxying and security headers.
+---
+
+## 📊 Understanding the Risk Score
+
+SocialShield assigns an explainable **Risk Score from 0 to 100**:
+
+| Score | Risk Level | Color | What It Means |
+| :---: | :---: | :---: | :--- |
+| **0 – 14** | **INFO / SAFE** | 🟢 Green | Clean target. No indicators of compromise or fraud detected. |
+| **15 – 39** | **LOW** | 🔵 Blue | Minor anomalies (e.g. HTTP instead of HTTPS, unverified terms). |
+| **40 – 64** | **MEDIUM** | 🟡 Yellow | Suspicious characteristics found (e.g. unverified brand mention, freshly registered domain). |
+| **65 – 84** | **HIGH** | 🟠 Orange | Strong indicators of social engineering, scam wording, or typosquatting. |
+| **85 – 100** | **CRITICAL** | 🔴 Red | Dangerous threat! Confirmed malware/phishing feed match or active credential harvester. |
 
 ---
 
-## 📡 API Reference
+## 🛠️ The 4 Core Intelligence Engines
 
-| Method | Endpoint | Description | Auth Required |
-| :--- | :--- | :--- | :---: |
-| `GET` | `/health` | Liveness probe & database connectivity | No |
-| `GET` | `/api/metrics` | Observability metrics (scans, users, uptime) | No |
-| `POST` | `/api/auth/register` | Register new user account | No (Rate-limited) |
-| `POST` | `/api/auth/login` | Authenticate user & return JWT token | No (Rate-limited) |
-| `GET` | `/api/auth/me` | Fetch authenticated user profile | Yes (Bearer) |
-| `POST` | `/api/scans/` | Execute comprehensive OSINT + Fraud scan | No (Rate-limited & SSRF-guarded) |
-| `GET` | `/api/scans/` | List historical scan records | No |
-| `GET` | `/api/scans/{id}` | Retrieve individual scan details & evidence | No |
-| `GET` | `/api/scans/{id}/analyst` | Retrieve AI Security Analyst report | No |
-| `DELETE` | `/api/scans/{id}` | Delete scan record | Yes (`admin` role) |
+### 1. OSINT Engine (`backend/app/services/osint/`)
+- **Username Footprinting**: Probes public availability across Twitter/X, GitHub, Instagram, YouTube, TikTok, and LinkedIn without logging in.
+- **Homoglyph & Cyrillic Detection**: Spots lookalike letters designed to deceive the human eye (e.g., using Cyrillic `а` instead of Latin `a` in `pаypal`).
+- **Domain & DNS Intelligence**: Queries Cloudflare DNS-over-HTTPS for A, AAAA, MX, NS, and email security records (SPF/DMARC).
+- **Domain Age Forensics**: Uses ICANN RDAP to determine domain registration age. Domains younger than 30 days are automatically flagged.
+- **Redirect Tracer**: Follows URL shorteners (`bit.ly`, `tinyurl.com`) to reveal their true final destination.
+
+### 2. Fraud Engine (`backend/app/services/fraud/`)
+- **Scam Pattern Detector**: Identifies 6 major fraud categories:
+  - Crypto doublers & giveaway drainers ("Send 1 ETH to receive 2 ETH")
+  - Fake job & task investment scams ("Earn $500/day liking videos")
+  - Advance-fee & fake lottery rewards
+  - Romance / Pig Butchering investment traps
+  - Fake tech support & extortion threats
+  - Artificial urgency triggers ("Account suspended in 24 hours!")
+- **Phishing Detector**: Measures Levenshtein edit-distance against high-value brands (`paypal`, `microsoft`, `apple`, `google`, `binance`, `coinbase`, `metamask`, `steam`, etc.) and flags deceptive subdomains (like `paypal.com.verify-user.xyz`).
+- **High-Abuse TLD Scoring**: Penalizes suspicious top-level domains commonly used in disposable phishing (`.xyz`, `.top`, `.buzz`, `.icu`, `.tk`, etc.).
+
+### 3. AI Security Analyst (`backend/app/services/ai_analyst/`)
+- **Executive Threat Summary**: Translates raw forensic data into plain, easy-to-read English.
+- **Threat Actor Profiling**: Identifies attacker intent, sophistication level (Low, Moderate, Advanced), and targeted demographic.
+- **MITRE ATT&CK® Mapping**: Maps findings to standard security framework techniques (e.g., `T1566.002 Spearphishing Link`, `T1583.001 Acquire Domains`, `T1656 Impersonation`).
+- **Actionable Containment Steps**: Gives immediate instructions to prevent loss (e.g., reset passwords, block DNS, report to registrar abuse contacts).
+
+### 4. Security Hardening (`backend/app/services/security/`)
+- **JWT & PBKDF2 Password Hashing**: Enterprise-grade password security using salted SHA-256 with 100,000 iterations.
+- **Role-Based Access Control (RBAC)**: Enforces permissions for `admin`, `analyst`, and `viewer`.
+- **SSRF Attack Protection**: Prevents attackers from using the scanner to probe your local network, loopback (`127.0.0.1`), or cloud metadata (`169.254.169.254`).
+- **Prompt-Injection Defenses**: Sanitizes inputs to prevent malicious text from overriding or jailbreaking the AI analysis engine.
+- **Rate Limiting**: Protects against automated spam and denial-of-service attempts.
 
 ---
 
-## ⚖️ Security & Ethical Disclaimer
+## 🧪 Automated Testing (Sprint 7)
 
-SocialShield is designed exclusively for authorized security research, fraud prevention, victim assistance, and defensive cybersecurity operations. It does not perform active intrusion, credential interception, or non-public data harvesting.
+SocialShield includes a complete automated test suite covering unit tests, API tests, security hardening, and false-positive benchmarks.
+
+Run all tests with one command:
+```powershell
+cd backend
+.\venv\Scripts\python -m pytest -v tests/
+```
+
+### What the Tests Verify (27/27 Passing):
+- ✅ **Unit Tests (`test_unit_engines.py`)**: Tests username entropy, homoglyph character matching, scam triggers, brand typosquatting, and risk calculations.
+- ✅ **API Tests (`test_api_endpoints.py`)**: Tests user registration, login, JWT token auth, scan creation, history retrieval, and AI reports.
+- ✅ **Security Tests (`test_security_hardening.py`)**: Tests that SSRF attacks against internal IPs are blocked, security headers are present, prompt-injection attacks are defanged, and non-admins cannot delete scans.
+- ✅ **False-Positive Tests (`test_false_positives.py`)**: Tests benign everyday targets (`google.com`, `github.com`, ordinary usernames) to ensure they never trigger false high-risk alarms.
+
+---
+
+## 🐳 Easy Production Deployment (Docker Compose)
+
+Want to run the complete stack (Database + Backend + Frontend) in production with Docker?
+
+Run:
+```bash
+docker compose up --build -d
+```
+
+This starts:
+1. **`socialshield-db`**: PostgreSQL 16 Alpine with automatic health checks.
+2. **`socialshield-api`**: FastAPI backend with multi-worker support.
+3. **`socialshield-web`**: Production React SPA served via Nginx with gzip compression and reverse proxying.
+
+---
+
+## ☁️ Zero-Budget Cloud Hosting (Render + Vercel)
+
+SocialShield is ready for 100% free cloud deployment:
+
+- **Backend (FastAPI)**: Deploy to [Render.com](https://render.com) using the included [`render.yaml`](render.yaml) blueprint (free tier).
+- **Frontend (React)**: Deploy to [Vercel](https://vercel.com) using the included [`frontend/vercel.json`](frontend/vercel.json) (free tier).
+- **Database**: Use a free PostgreSQL database from [Neon.tech](https://neon.tech) or Render.
+
+---
+
+## 📁 Project Directory Guide
+
+```text
+SocialShield/
+├── backend/                         # FastAPI Python Application
+│   ├── app/
+│   │   ├── api/                    # API Endpoints (Auth, Scans)
+│   │   ├── models/                 # Database Models (Scan, User)
+│   │   ├── services/
+│   │   │   ├── osint/             # OSINT Engine (Username, Domain, URL, Metadata)
+│   │   │   ├── fraud/             # Fraud Engine (Scams, Phishing, Impersonation)
+│   │   │   ├── ai_analyst/        # AI Cyber Analyst & MITRE ATT&CK Mappings
+│   │   │   └── security/          # Security Hardening (JWT, RBAC, SSRF, Rate Limiting)
+│   │   ├── database.py             # PostgreSQL SQLAlchemy Connection
+│   │   └── main.py                 # FastAPI Gateway & Security Headers
+│   ├── tests/                      # Pytest Automated Test Suite (27 tests)
+│   ├── Dockerfile                  # Multi-stage production container
+│   └── requirements.txt            # Python dependencies
+│
+├── frontend/                        # React 19 + TypeScript Frontend
+│   ├── src/
+│   │   ├── pages/
+│   │   │   ├── LoginPage.tsx      # Authenticated JWT Login Page
+│   │   │   ├── DashboardPage.tsx  # Security Dashboard & Scan Form
+│   │   │   └── FindingsPage.tsx   # Detailed Forensic Report & AI Card
+│   │   ├── styles/                 # Dark cyberpunk glassmorphism CSS
+│   │   ├── api.ts                  # Axios client with JWT interceptor
+│   │   └── types.ts                # TypeScript data interfaces
+│   ├── Dockerfile                  # Nginx production container
+│   ├── nginx.conf                  # Nginx reverse proxy configuration
+│   └── vercel.json                 # Vercel zero-budget configuration
+│
+├── docs/                            # In-depth Architecture & Operations Guides
+├── docker-compose.yml               # Complete local multi-container stack
+├── render.yaml                      # Render free tier deployment blueprint
+└── README.md                        # Master project documentation
+```
+
+---
+
+## ❓ Frequently Asked Questions (FAQ)
+
+<details>
+<summary><b>1. Do I need to buy an OpenAI or Anthropic API key to use the AI Analyst?</b></summary>
+<p>No! SocialShield comes with a built-in <b>Autonomous Cyber Analyst Engine</b> that runs 100% locally on your computer with zero API keys and zero cost. If you wish, you can optionally connect a free-tier Google Gemini or Groq key in your <code>.env</code> file, but it is completely optional.</p>
+</details>
+
+<details>
+<summary><b>2. Does SocialShield hack or log into the accounts it inspects?</b></summary>
+<p>No. SocialShield is strictly defensive. It only inspects publicly available information (such as DNS records, domain registration age, HTTP headers, and public profile existence) without performing unauthorized access or credential interception.</p>
+</details>
+
+<details>
+<summary><b>3. What should I do if a scan shows HIGH or CRITICAL risk?</b></summary>
+<p>Check the <b>Immediate Containment & Incident Response</b> section on the Findings page. Recommended steps typically include avoiding entering credentials, blocking the domain on your network/DNS, reporting the site to Google Safe Browsing, and submitting abuse notices to the hosting provider or registrar.</p>
+</details>
+
+---
+
+## ⚖️ License & Ethical Disclaimer
+
+SocialShield is released under the **MIT License**. It is designed solely for defensive cybersecurity research, fraud prevention, victim assistance, and educational use.
