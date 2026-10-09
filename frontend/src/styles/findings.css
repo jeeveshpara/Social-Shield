@@ -1,0 +1,958 @@
+/* ── Findings (Full Report) Page ─────────────────────────────────────────── */
+
+.findings-page {
+  min-height: 100vh;
+  position: relative;
+  background: var(--bg-base);
+  overflow-x: hidden;
+}
+
+/* Background glows */
+.fp-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.fp-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.3;
+}
+
+.fp-glow-1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(59,130,246,0.5), transparent 70%);
+  top: -100px;
+  left: -120px;
+}
+
+.fp-glow-2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(168,85,247,0.4), transparent 70%);
+  bottom: -80px;
+  right: -80px;
+}
+
+/* Container */
+.fp-container {
+  position: relative;
+  z-index: 1;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+}
+
+/* Back button */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(13,22,38,0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 28px;
+  transition: border-color var(--transition), color var(--transition);
+  font-family: inherit;
+}
+
+.back-btn:hover {
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+}
+
+/* Loading / error states */
+.fp-loading {
+  text-align: center;
+  padding: 80px 32px;
+  color: var(--text-secondary);
+}
+
+.fp-error {
+  padding: 16px 20px;
+  background: rgba(239,68,68,0.12);
+  border: 1px solid rgba(239,68,68,0.3);
+  border-radius: var(--radius-md);
+  color: var(--risk-high-text);
+  font-size: 0.9rem;
+  margin-top: 16px;
+}
+
+/* ── Report header ───────────────────────────────────────────────────────── */
+
+.fp-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
+  padding: 32px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(56,189,248,0.10);
+  border: 1px solid rgba(56,189,248,0.25);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--cyan);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.fp-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.fp-meta {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.fp-platform {
+  font-family: "JetBrains Mono", monospace;
+  color: var(--cyan);
+}
+
+/* Risk badge (large, in header) */
+.fp-risk-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 28px;
+  border-radius: var(--radius-md);
+  text-align: center;
+  flex-shrink: 0;
+  min-width: 120px;
+}
+
+.fp-risk-score {
+  font-size: 2.8rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.fp-risk-denom {
+  font-size: 0.9rem;
+  font-weight: 500;
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+
+.fp-risk-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 4px;
+  padding: 3px 10px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 999px;
+}
+
+/* ── Cards ───────────────────────────────────────────────────────────────── */
+
+.fp-card {
+  margin-bottom: 20px;
+  padding: 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.fp-card-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.fp-target-value {
+  font-size: 1.05rem;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--cyan);
+  overflow-wrap: anywhere;
+  word-break: break-all;
+  margin-bottom: 10px;
+}
+
+.fp-scope {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.fp-disclaimer {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* ── Risk bar ────────────────────────────────────────────────────────────── */
+
+.fp-section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.fp-count {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  font-weight: 400;
+  background: rgba(56,189,248,0.08);
+  border: 1px solid var(--border);
+  padding: 2px 10px;
+  border-radius: 999px;
+}
+
+.risk-bar-track {
+  height: 10px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.risk-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.risk-fill-high   { background: linear-gradient(90deg, #ef4444, #dc2626); box-shadow: 0 0 10px rgba(239,68,68,0.5); }
+.risk-fill-medium { background: linear-gradient(90deg, #eab308, #ca8a04); box-shadow: 0 0 10px rgba(234,179,8,0.4);  }
+.risk-fill-low    { background: linear-gradient(90deg, #22c55e, #16a34a); box-shadow: 0 0 10px rgba(34,197,94,0.4);  }
+.risk-fill-info   { background: linear-gradient(90deg, #38bdf8, #0284c7); box-shadow: 0 0 10px rgba(56,189,248,0.4); }
+
+.risk-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.rbl-safe  { color: var(--risk-low-text); }
+.rbl-med   { color: var(--risk-med-text); }
+.rbl-high  { color: var(--risk-high-text); }
+
+/* ── Findings grid ───────────────────────────────────────────────────────── */
+
+.fp-findings-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.fp-finding-card {
+  padding: 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  border-left-width: 3px;
+  transition: border-color var(--transition), transform var(--transition);
+}
+
+.fp-finding-card:hover {
+  transform: translateX(2px);
+}
+
+/* Severity-based left border */
+.severity-high-border   { border-left-color: var(--red);    }
+.severity-medium-border { border-left-color: var(--yellow); }
+.severity-low-border    { border-left-color: var(--green);  }
+.severity-info-border   { border-left-color: var(--cyan);   }
+
+.fp-finding-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.fp-finding-code {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-transform: capitalize;
+}
+
+.fp-finding-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.fp-points {
+  font-size: 0.75rem;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--cyan);
+  background: rgba(56,189,248,0.08);
+  border: 1px solid rgba(56,189,248,0.2);
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+/* Severity badges on findings page */
+.fp-sev-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.sev-high   { background: var(--risk-high-bg); color: var(--risk-high-text); }
+.sev-medium { background: var(--risk-med-bg);  color: var(--risk-med-text);  }
+.sev-low    { background: var(--risk-low-bg);  color: var(--risk-low-text);  }
+.sev-info   { background: var(--risk-info-bg); color: var(--risk-info-text); }
+
+.fp-finding-evidence {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.fp-recommendation {
+  margin-top: 14px;
+  padding: 12px 16px;
+  background: rgba(56,189,248,0.05);
+  border-left: 3px solid var(--cyan);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.fp-rec-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+
+.fp-recommendation p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ── Empty state ─────────────────────────────────────────────────────────── */
+
+.fp-empty {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--text-muted);
+}
+
+.fp-empty span {
+  display: block;
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+
+.fp-footer {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.fp-footer-brand {
+  margin-top: 8px;
+  color: var(--text-muted);
+  opacity: 0.6;
+  font-size: 0.72rem;
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .fp-header {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .fp-risk-badge {
+    width: 100%;
+  }
+
+  .fp-title {
+    font-size: 1.2rem;
+  }
+
+  .fp-container {
+    padding: 20px 16px 48px;
+  }
+}
+
+/* ── Sprint 3 OSINT Engine Intelligence Styles ────────────────────────── */
+
+.fp-osint-section {
+  margin-bottom: 28px;
+}
+
+.fp-osint-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .fp-osint-grid.two-col {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.fp-osint-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-card);
+  transition: border-color var(--transition);
+}
+
+.fp-osint-card:hover {
+  border-color: var(--border-hover);
+}
+
+.fp-osint-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 14px;
+}
+
+.fp-osint-badge-chip {
+  font-size: 0.72rem;
+  font-family: "JetBrains Mono", monospace;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(56,189,248,0.12);
+  color: var(--cyan);
+  border: 1px solid rgba(56,189,248,0.25);
+  margin-left: auto;
+}
+
+/* Footprint Grid */
+.footprint-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.footprint-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: rgba(13,22,38,0.6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: all var(--transition);
+}
+
+.footprint-item.found {
+  border-color: rgba(34,197,94,0.4);
+  background: rgba(34,197,94,0.06);
+}
+
+.footprint-item.found:hover {
+  border-color: var(--green);
+  transform: translateY(-2px);
+}
+
+.footprint-item.not_found {
+  opacity: 0.65;
+}
+
+.footprint-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.footprint-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  margin-top: 6px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.footprint-item.found .footprint-status {
+  color: var(--risk-low-text);
+}
+
+.footprint-item.not_found .footprint-status {
+  color: var(--text-muted);
+}
+
+.footprint-item.timeout .footprint-status,
+.footprint-item.rate_limited .footprint-status {
+  color: var(--risk-med-text);
+}
+
+/* Domain & DNS Styles */
+.meta-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.85rem;
+}
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.meta-row:last-child {
+  border-bottom: none;
+}
+
+.meta-key {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.meta-val {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.8rem;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.dns-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.dns-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.74rem;
+  font-family: "JetBrains Mono", monospace;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(13,22,38,0.8);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+
+.dns-tag.valid {
+  border-color: rgba(34,197,94,0.3);
+  color: var(--risk-low-text);
+}
+
+.dns-tag.missing {
+  border-color: rgba(239,68,68,0.3);
+  color: var(--risk-high-text);
+}
+
+/* URL Redirect Chain Flow */
+.redirect-chain-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.redirect-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: rgba(13,22,38,0.6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.78rem;
+  overflow: hidden;
+}
+
+.hop-num {
+  font-weight: 700;
+  color: var(--cyan);
+  background: rgba(56,189,248,0.1);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.7rem;
+}
+
+.hop-status {
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+.hop-status.redirect {
+  background: rgba(234,179,8,0.15);
+  color: var(--yellow);
+}
+
+.hop-status.ok {
+  background: rgba(34,197,94,0.15);
+  color: var(--green);
+}
+
+.hop-url {
+  color: var(--text-secondary);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Forensics Raw Evidence Viewer */
+.forensics-details {
+  margin-top: 24px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  overflow: hidden;
+}
+
+.forensics-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  user-select: none;
+  background: rgba(255,255,255,0.02);
+}
+
+.forensics-summary:hover {
+  background: rgba(255,255,255,0.04);
+}
+
+.forensics-json {
+  margin: 0;
+  padding: 16px 20px;
+  background: #090e17;
+  color: #a5b4fc;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  overflow-x: auto;
+  max-height: 380px;
+  border-top: 1px solid var(--border);
+}
+
+/* ── AI Security Analyst Widget (Sprint 5) ───────────────────────────────── */
+.ai-analyst-section {
+  margin-bottom: 32px;
+}
+
+.ai-analyst-card {
+  background: linear-gradient(135deg, rgba(17, 24, 39, 0.95), rgba(30, 27, 75, 0.85));
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  box-shadow: 0 12px 36px rgba(139, 92, 246, 0.12);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-analyst-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899);
+}
+
+.ai-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.ai-analyst-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(139, 92, 246, 0.18);
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #c4b5fd;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ai-engine-tag {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+
+.ai-summary-text {
+  font-size: 0.96rem;
+  line-height: 1.65;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+  padding-left: 12px;
+  border-left: 3px solid #8b5cf6;
+}
+
+.ai-grid-two {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.ai-subcard {
+  background: rgba(10, 15, 29, 0.75);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+}
+
+.ai-subcard-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.actor-pill-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.actor-pill-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.84rem;
+}
+
+.actor-label {
+  color: var(--text-secondary);
+}
+
+.actor-val {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.mitre-badge-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mitre-badge-item {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+
+.mitre-badge-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.mitre-id {
+  font-family: monospace;
+  font-weight: 700;
+  color: #38bdf8;
+  font-size: 0.82rem;
+}
+
+.mitre-tactic {
+  font-size: 0.72rem;
+  color: #f472b6;
+  background: rgba(244, 114, 182, 0.12);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.mitre-desc {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.ai-bullets-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ai-bullet-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.ai-bullet-icon {
+  color: #8b5cf6;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.containment-box {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  margin-top: 20px;
+}
+
+.containment-title {
+  color: #f87171;
+  font-weight: 700;
+  font-size: 0.84rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── Fraud Engine Multi-Factor Dimension Radar ────────────────────────────── */
+.radar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.radar-item {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.radar-label {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.radar-val-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.radar-val {
+  font-size: 1.15rem;
+  font-weight: 800;
+  font-family: monospace;
+}
+
+.radar-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.radar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
